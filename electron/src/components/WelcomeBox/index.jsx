@@ -4,7 +4,11 @@ import "./WelcomeBox.css";
 import Icon from "../../assets/icon.ico";
 import { useState } from "react";
 
+import { useSocket } from "../../hooks/useSocket";
+
 const WelcomeBox = (props) => {
+  const { connected, totalOnline, totalReady, socket } = useSocket();
+
   const [label, setLabel] = useState("Choose a Movie");
 
   const getFileName = (event) => {
@@ -22,12 +26,17 @@ const WelcomeBox = (props) => {
             id="my-file"
             data-file-name=""
             onChange={(event) => {
-              //   props.handleVideoUpload(event);
+              props.handleVideoUpload(event);
               getFileName(event);
             }}
           />
           <label for="my-file">{label}</label>
         </div>
+        {totalOnline && (
+          <span>
+            {totalReady} of {totalOnline} ready
+          </span>
+        )}
       </div>
     </div>
   );
