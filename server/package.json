@@ -3,5 +3,14 @@
   "version": "1.0.0",
   "main": "server.js",
   "author": "Satnam Singh",
-  "license": "MIT"
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "nodemon": "^3.0.2",
+    "socket.io": "^4.7.3"
+  }
 }

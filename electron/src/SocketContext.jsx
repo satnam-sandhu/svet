@@ -1,16 +1,22 @@
-"use strict";
+// SocketContext.js
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { io } from "socket.io-client";
-import { useEffect, useState } from "react";
 
-export const useSocket = () => {
+const SocketContext = createContext();
+
+export const SocketProvider = ({ children }) => {
   const [socket, setSocket] = useState(null);
   const [connected, setConnected] = useState(false);
   const [totalOnline, setTotalOnline] = useState(0);
   const [totalReady, setTotalReady] = useState(0);
 
   useEffect(() => {
-    if (socket) return;
-    setSocket(io("http://localhost:8080"));
+    const newSocket = io("http://localhost:8080");
+    setSocket(newSocket);
+
+    return () => {
+      newSocket.disconnect();
+    };
   }, []);
 
   useEffect(() => {
@@ -29,5 +35,15 @@ export const useSocket = () => {
     });
   }, [socket]);
 
-  return { connected, totalOnline, totalReady, socket };
+  return (
+    <SocketContext.Provider
+      value={{ socket, connected, totalOnline, totalReady }}
+    >
+      {children}
+    </SocketContext.Provider>
+  );
+};
+
+export const useSocket = () => {
+  return useContext(SocketContext);
 };
